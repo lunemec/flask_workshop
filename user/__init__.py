@@ -4,4 +4,4 @@ from app import app
 from .views import *
 
 api = Api(app, prefix='/user')
-api.add_resource(UserListing, '/listing')
+api.add_resource(UserListing, '/listing', endpoint='user_listing')
