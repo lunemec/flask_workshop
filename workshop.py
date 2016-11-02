@@ -1,4 +1,6 @@
 from app import app
+
+import admin
 from user.views import hello_world
 
 

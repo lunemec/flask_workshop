@@ -17,6 +17,8 @@ setup(
     long_description=read('README.md'),
     install_requires=[
         "flask",
+        "flask-sqlalchemy",
+        "flask-admin",
         "pytest",
     ]
 )
