@@ -19,6 +19,7 @@ setup(
         "flask",
         "flask-sqlalchemy",
         "flask-admin",
+        "flask-restful",
         "pytest",
     ]
 )

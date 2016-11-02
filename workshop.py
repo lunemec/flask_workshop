@@ -1,7 +1,7 @@
 from app import app
 
 import admin
-from user.views import hello_world
+import user
 
 
 if __name__ == '__main__':
