@@ -13,9 +13,10 @@ setup(
     author_email = "your.name@somewhere.com",
     description = ("Flask workshop."),
     url = "https://github.com/nekdo/flask-workshop",
-    packages=['workshop',],
+    packages=[],
     long_description=read('README.md'),
     install_requires=[
         "flask",
+        "pytest",
     ]
 )

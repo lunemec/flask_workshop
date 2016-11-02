@@ -1,4 +1,5 @@
 *.swp
 *.pyc
+.cache
 .virtualenv
 flask_workshop.egg-info
