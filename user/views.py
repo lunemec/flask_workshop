@@ -7,11 +7,7 @@ from flask_restful import Resource
 from .control import list_users, get_user
 from .exceptions import UserNotFound, UnspecifiedError
 
-__all__ = ('hello_world', 'UserDetail', 'UserListing')
-
-@app.route('/')
-def hello_world():
-    return jsonify({'data': 'Hello, world!'})
+__all__ = ('UserDetail', 'UserListing')
 
 
 class UserDetail(Resource):
