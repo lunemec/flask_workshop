@@ -1,10 +1,9 @@
 import traceback
-from app import app
-from auth import auth
 
 from flask import jsonify, g, request
 from flask_restful import Resource
 
+from .auth import auth
 from .control import list_users, get_user, create_user
 from .exceptions import UserNotFound, UnspecifiedError, InvalidArguments, UserAlreadyExists
 

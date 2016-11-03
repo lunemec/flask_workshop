@@ -1,10 +1,5 @@
-from app import app
-import auth
-import log
-
-import admin
-import user
+from app import create_app
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    create_app().run(debug=True)

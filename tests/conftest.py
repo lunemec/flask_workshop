@@ -1,7 +1,7 @@
 import pytest
 
+from app import create_app
 from database import db as test_db
-import workshop
 
 from tests.user.conftest import *
 
@@ -10,9 +10,10 @@ TEST_DB = 'sqlite://'
 
 @pytest.yield_fixture
 def app(request):
-    with workshop.app.test_request_context():
-        workshop.app.config['TESTING'] = True
-        yield workshop.app
+    app = create_app()
+    with app.test_request_context():
+        app.config['TESTING'] = True
+        yield app
 
 
 @pytest.yield_fixture

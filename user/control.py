@@ -1,9 +1,6 @@
-from app import app
-from auth import auth
-from database import db
+from flask import current_app, g
 
-from flask import g
-
+from .auth import auth
 from .exceptions import UserNotFound, UnspecifiedError, InvalidArguments, UserAlreadyExists
 from .models import User
 
@@ -28,10 +25,10 @@ def get_user(user_id):
             raise UserNotFound()
         return {'id': user.id, 'username': user.username, 'password_hash': user.password_hash}
     except UserNotFound:
-        app.logger.info('User not found.', extra={'id': user_id})
+        current_app.logger.info('User not found.', extra={'id': user_id})
         raise
     except Exception as e:
-        app.logger.exception('Error while getting user.', extra={'id': user_id})
+        current_app.logger.exception('Error while getting user.', extra={'id': user_id})
         raise UnspecifiedError(e) 
 
 
@@ -50,11 +47,11 @@ def create_user(username, password):
 
         user = User(username = username)
         user.hash_password(password)
-        db.session.add(user)
-        db.session.commit()
+        current_app.db.session.add(user)
+        current_app.db.session.commit()
         return user.id
     except (InvalidArguments, UserAlreadyExists):
         raise
     except Exception as e:
-        app.logger.exception('Error while creating user.', extra={'username': username})
+        current_app.logger.exception('Error while creating user.', extra={'username': username})
         raise UnspecifiedError(e)
