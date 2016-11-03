@@ -21,5 +21,6 @@ setup(
         "flask-admin",
         "flask-restful",
         "pytest",
+        "python-json-logger",
     ]
 )

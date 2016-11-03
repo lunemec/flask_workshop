@@ -18,7 +18,7 @@ class UserDetail(Resource):
         except UserNotFound:
             return {'status_code': 404}
         except UnspecifiedError as e:
-            return {'status_code': 500, 'info': traceback.format_exc()}
+            return {'status_code': 500, 'info': str(e)}
 
 
 class UserListing(Resource):
