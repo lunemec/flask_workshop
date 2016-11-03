@@ -1,11 +1,9 @@
-import os
 import pytest
 
 from database import db as test_db
 import workshop
 
-DB_FILE = '/tmp/sqlite.db'
-TEST_DB = 'sqlite:///' + DB_FILE
+TEST_DB = 'sqlite://'
 
 
 @pytest.yield_fixture
@@ -22,8 +20,6 @@ def db(request, app):
     test_db.init_app(app)
     test_db.create_all()
     yield test_db
-
-    os.remove(DB_FILE)
 
 
 @pytest.fixture

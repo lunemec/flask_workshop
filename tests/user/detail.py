@@ -18,7 +18,8 @@ def test_not_found(client, user):
     assert json_data == {'status_code': 404}
 
 
-def test_unspecified_error(client):
+def test_unspecified_error(app, client):
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/unknown.db'
     result = client.get(url_for('user', user_id=1))
     json_data = json.loads(result.data.decode('utf-8'))
 
