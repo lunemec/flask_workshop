@@ -2,6 +2,9 @@ import pytest
 
 from user.models import User
 
+__all__ = ('user_data', 'user')
+
+
 @pytest.fixture
 def user_data():
     return {'username': 'Test client', 'password': 'my_awesome_password'}

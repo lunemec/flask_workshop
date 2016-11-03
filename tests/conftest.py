@@ -3,6 +3,8 @@ import pytest
 from database import db as test_db
 import workshop
 
+from tests.user.conftest import *
+
 TEST_DB = 'sqlite://'
 
 
