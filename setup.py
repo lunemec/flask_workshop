@@ -15,6 +15,7 @@ setup(
     url = "https://github.com/nekdo/flask-workshop",
     packages=[],
     long_description=read('README.md'),
+    setup_requires=['pytest-runner'],
     install_requires=[
         "flask",
         "flask-sqlalchemy",
@@ -22,7 +23,7 @@ setup(
         "flask-restful",
         "flask_httpauth",
         "passlib",
-        "pytest",
         "python-json-logger",
-    ]
+    ],
+    tests_require=['pytest'],
 )
