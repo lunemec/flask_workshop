@@ -20,6 +20,8 @@ setup(
         "flask-sqlalchemy",
         "flask-admin",
         "flask-restful",
+        "flask_httpauth",
+        "passlib",
         "pytest",
         "python-json-logger",
     ]
