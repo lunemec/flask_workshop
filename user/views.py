@@ -1,13 +1,14 @@
 import traceback
 from app import app
+from auth import auth
 
-from flask import jsonify, request
+from flask import jsonify, g, request
 from flask_restful import Resource
 
 from .control import list_users, get_user, create_user
 from .exceptions import UserNotFound, UnspecifiedError, InvalidArguments, UserAlreadyExists
 
-__all__ = ('UserDetail', 'UserCreate', 'UserListing')
+__all__ = ('UserToken', 'UserDetail', 'UserCreate', 'UserListing')
 
 
 class UserDetail(Resource):
@@ -38,6 +39,13 @@ class UserCreate(Resource):
             return {'status_code': 500, 'info': str(e)}
 
         return {'status_code': 200, 'id': user_id}
+
+
+class UserToken(Resource):
+    decorators = [auth.login_required]
+    def get(self):
+        token = g.user.generate_auth_token()
+        return {'token': token.decode('ascii')}
 
 
 class UserListing(Resource):

@@ -2,6 +2,8 @@ from app import app
 from auth import auth
 from database import db
 
+from flask import g
+
 from .exceptions import UserNotFound, UnspecifiedError, InvalidArguments, UserAlreadyExists
 from .models import User
 
