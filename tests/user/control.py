@@ -1,8 +1,10 @@
 import pytest
 import random
+import time
 
-from user.control import get_user, list_users
-from user.exceptions import UnspecifiedError, UserNotFound
+from user.control import get_user, create_user, list_users, verify_password
+from user.exceptions import UnspecifiedError, UserNotFound, InvalidArguments, UserAlreadyExists
+from user.models import User
 
 
 def test_list_control(app, user):
@@ -25,3 +27,56 @@ def test_user_found(app, user):
     assert data['id'] == user.id
     assert data['username'] == user.username
     assert data['password_hash'] == user.password_hash
+
+
+def test_create_user(app, db):
+    user_id = create_user('test_user', 'some_password')
+    assert user_id is not None
+    user_data = get_user(user_id)
+    assert user_data['username'] == 'test_user'
+
+
+def test_create_user_invalid_arguments(app, db):
+    with pytest.raises(InvalidArguments):
+        create_user('username', None)
+
+
+def test_create_user_already_exists(app, user):
+    with pytest.raises(UserAlreadyExists):
+        create_user(user.username, 'password')
+
+
+def test_token_works(app, db):
+    """
+    Slozitejsi test, lepe popsat co dela:
+        zalozime noveho uzivatele
+        vygenerujeme novy token
+        overime ze se s nim lze prihlasit
+    """
+    user_id = create_user('awesome_user', 'awesome_password')
+    # Potrebujeme nacist model usera, ne jen dict jeho dat.
+    user_model = User.query.get(user_id)
+    token = user_model.generate_auth_token()
+    token_valid = verify_password(token, None)
+    assert token_valid
+
+
+def test_token_expires(app, db):
+    """
+    Slozitejsi test, lepe popsat co dela:
+        zalozime noveho uzivatele
+        vygenerujeme novy token s platnosti 1s
+        overime ze se s nim lze prihlasit
+        pockame 2s
+        overime ze se s nim uz nelze prihlasit
+    """
+    user_id = create_user('awesome_user', 'awesome_password')
+    # Potrebujeme nacist model usera, ne jen dict jeho dat.
+    user_model = User.query.get(user_id)
+    token = user_model.generate_auth_token(expiration=1)
+    token_valid = verify_password(token, None)
+    assert token_valid
+    # Na tohle v testech POZOR! 
+    time.sleep(2)
+    token_valid = verify_password(token, None)
+    assert not token_valid
