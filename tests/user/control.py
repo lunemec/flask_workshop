@@ -7,9 +7,9 @@ from user.exceptions import UnspecifiedError, UserNotFound, InvalidArguments, Us
 from user.models import User
 
 
-def test_list_control(app, user):
+def test_list_control(app, user, user_data):
     result = list_users()
-    assert result == [{'id': 1, 'username': 'Test client'}]
+    assert result == [{'id': 1, 'username': user_data['username']}]
 
 
 def test_user_not_found(app, user):
@@ -29,11 +29,12 @@ def test_user_found(app, user):
     assert data['password_hash'] == user.password_hash
 
 
-def test_create_user(app, db):
-    user_id = create_user('test_user', 'some_password')
+def test_create_user(app, db, user_data):
+    user_id = create_user(user_data['username'], user_data['password'])
     assert user_id is not None
-    user_data = get_user(user_id)
-    assert user_data['username'] == 'test_user'
+    created_user_data = get_user(user_id)
+    assert created_user_data['username'] == user_data['username']
+    assert created_user_data['password_hash']
 
 
 def test_create_user_invalid_arguments(app, db):
@@ -46,14 +47,14 @@ def test_create_user_already_exists(app, user):
         create_user(user.username, 'password')
 
 
-def test_token_works(app, db):
+def test_token_works(app, db, user_data):
     """
     Slozitejsi test, lepe popsat co dela:
         zalozime noveho uzivatele
         vygenerujeme novy token
         overime ze se s nim lze prihlasit
     """
-    user_id = create_user('awesome_user', 'awesome_password')
+    user_id = create_user(user_data['username'], user_data['password'])
     # Potrebujeme nacist model usera, ne jen dict jeho dat.
     user_model = User.query.get(user_id)
     token = user_model.generate_auth_token()
@@ -61,7 +62,7 @@ def test_token_works(app, db):
     assert token_valid
 
 
-def test_token_expires(app, db):
+def test_token_expires(app, db, user_data):
     """
     Slozitejsi test, lepe popsat co dela:
         zalozime noveho uzivatele
@@ -70,7 +71,7 @@ def test_token_expires(app, db):
         pockame 2s
         overime ze se s nim uz nelze prihlasit
     """
-    user_id = create_user('awesome_user', 'awesome_password')
+    user_id = create_user(user_data['username'], user_data['password'])
     # Potrebujeme nacist model usera, ne jen dict jeho dat.
     user_model = User.query.get(user_id)
     token = user_model.generate_auth_token(expiration=1)
