@@ -1,13 +1,13 @@
 import traceback
 
-from flask import jsonify, g, request
+from flask import jsonify, g, request, render_template
 from flask_restful import Resource
 
 from .auth import auth
 from .control import list_users, get_user, create_user
 from .exceptions import UserNotFound, UnspecifiedError, InvalidArguments, UserAlreadyExists
 
-__all__ = ('UserToken', 'UserDetail', 'UserCreate', 'UserListing')
+__all__ = ('UserToken', 'UserDetail', 'UserCreate', 'UserListing', 'user_listing', 'user_detail')
 
 
 class UserDetail(Resource):
@@ -50,3 +50,13 @@ class UserToken(Resource):
 class UserListing(Resource):
     def get(self):
         return {'status_code': 200, 'data': list_users()}
+
+
+@auth.login_required
+def user_listing():
+    return render_template('user_listing.html', users=list_users()), 200
+
+
+@auth.login_required
+def user_detail(user_id):
+    return render_template('user_detail.html', user=get_user(user_id)), 200

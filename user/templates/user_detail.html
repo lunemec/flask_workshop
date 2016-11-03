@@ -1,0 +1,21 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}This is an example page{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>User detail</h1>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td>ID</td>
+                    <td>{{ user.id }}</td>
+                </tr>
+                <tr>
+                    <td>Username</td>
+                    <td>{{ user.username }}</td>
+                </tr>
+              </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

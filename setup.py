@@ -23,6 +23,7 @@ setup(
         "flask-restful",
         "flask-httpauth",
         "flask-migrate",
+        "flask-bootstrap",
         "passlib",
         "python-json-logger",
     ],
