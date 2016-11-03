@@ -3,4 +3,9 @@
 .eggs
 .cache
 .virtualenv
+venv
 flask_workshop.egg-info
+*.sqlite
+
+# PyCharm
+.idea/
