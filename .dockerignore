@@ -1,0 +1,8 @@
+.git
+.cache
+.eggs
+.virtualenv
+.gitignore
+__pycache__
+flask_workshop.egg-info
+*.pyc
