@@ -1,6 +1,6 @@
 import traceback
 
-from flask import jsonify, g, request, render_template
+from flask import jsonify, g, request, render_template, current_app
 from flask_restful import Resource
 
 from .auth import auth
@@ -15,12 +15,14 @@ def handle_unexpected_exception(f):
         try:
             return f(*args, **kwargs)
         except Exception as e:
+            current_app.logger.exception('Unexpected error while processing request.',  extra={'headers': request.headers})
             return {'status_code': 500, 'info': str(e)}, 500
     return wrapper
 
 
 class UserDetail(Resource):
-    @handle_unexpected_exception
+    decorators = [handle_unexpected_exception]
+
     @auth.login_required
     def get(self, user_id):
         try:
@@ -50,7 +52,7 @@ class UserDetail(Resource):
 
 
 class UserToken(Resource):
-    decorators = [auth.login_required]
+    decorators = [handle_unexpected_exception, auth.login_required]
 
     def get(self):
         token = g.user.generate_auth_token()
@@ -58,15 +60,19 @@ class UserToken(Resource):
 
 
 class UserListing(Resource):
+    decorators = [handle_unexpected_exception]
+
     def get(self):
         return {'status_code': 200, 'data': list_users()}
 
 
+@handle_unexpected_exception
 @auth.login_required
 def user_listing():
     return render_template('user_listing.html', users=list_users()), 200
 
 
+@handle_unexpected_exception
 @auth.login_required
 def user_detail(user_id):
     return render_template('user_detail.html', user=get_user(user_id)), 200
