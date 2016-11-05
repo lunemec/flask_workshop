@@ -29,7 +29,7 @@ def get_user(user_id):
         raise
     except Exception as e:
         current_app.logger.exception('Error while getting user.', extra={'id': user_id})
-        raise UnspecifiedError(e) 
+        raise UnspecifiedError(e)
 
 
 def list_users():

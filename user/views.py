@@ -7,10 +7,21 @@ from .auth import auth
 from .control import list_users, get_user, create_user
 from .exceptions import UserNotFound, UnspecifiedError, InvalidArguments, UserAlreadyExists
 
-__all__ = ('UserToken', 'UserDetail', 'UserCreate', 'UserListing', 'user_listing', 'user_detail')
+__all__ = ('UserToken', 'UserDetail', 'UserListing', 'user_listing', 'user_detail')
+
+
+def handle_unexpected_exception(f):
+    def wrapper(*args, **kwargs):
+        try:
+            return f(*args, **kwargs)
+        except Exception as e:
+            return {'status_code': 500, 'info': str(e)}, 500
+    return wrapper
 
 
 class UserDetail(Resource):
+    @handle_unexpected_exception
+    @auth.login_required
     def get(self, user_id):
         try:
             data = get_user(user_id)
@@ -20,8 +31,6 @@ class UserDetail(Resource):
         except UnspecifiedError as e:
             return {'status_code': 500, 'info': str(e)}, 500
 
-
-class UserCreate(Resource):
     def post(self):
         if request.json is not None:
             username = request.json.get('username')
@@ -42,6 +51,7 @@ class UserCreate(Resource):
 
 class UserToken(Resource):
     decorators = [auth.login_required]
+
     def get(self):
         token = g.user.generate_auth_token()
         return {'status_code': 200, 'token': token.decode('ascii')}
