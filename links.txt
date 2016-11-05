@@ -1,0 +1,10 @@
+http://slides.skien.cc/flask-hacks-and-best-practices/
+
+
+https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world
+
+
+https://blog.miguelgrinberg.com/post/restful-authentication-with-flask
+
+https://www.youtube.com/watch?v=WwBdNXt6wO4
+
